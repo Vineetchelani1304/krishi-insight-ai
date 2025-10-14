@@ -5,11 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Leaf, Eye, EyeOff, Mail, Lock, User, MapPin } from "lucide-react";
 
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -24,6 +25,7 @@ const SignupPage = () => {
     e.preventDefault();
     // TODO: Implement signup with Supabase
     console.log("Signup attempted with:", formData);
+    navigate("/dashboard");
   };
 
   const updateFormData = (field: string, value: string) => {

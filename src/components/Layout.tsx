@@ -34,7 +34,7 @@ const Layout = () => {
                 <div className="p-2 bg-gradient-to-br from-primary to-primary-glow rounded-lg group-hover:shadow-medium transition-all duration-300">
                   <Leaf className="h-6 w-6 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold text-primary">AgriSense</span>
+                <span className="text-xl font-bold text-primary">KrishiMitra</span>
               </Link>
 
               {!isHomePage && (

@@ -215,7 +215,7 @@ const MarketAnalysis = () => {
           </Card>
 
           {/* Price Chart */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <BarChart3 className="h-5 w-5 mr-2 text-primary" />
@@ -242,10 +242,10 @@ const MarketAnalysis = () => {
                 ))}
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Nearby Buyers */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Users className="h-5 w-5 mr-2 text-accent" />
@@ -301,13 +301,13 @@ const MarketAnalysis = () => {
                 <ArrowUpRight className="h-4 w-4 ml-2" />
               </Button>
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Market Summary */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
                 <DollarSign className="h-5 w-5 mr-2 text-success" />
@@ -336,7 +336,7 @@ const MarketAnalysis = () => {
                 </div>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Price Alerts */}
           <Card>
@@ -368,7 +368,7 @@ const MarketAnalysis = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
@@ -392,7 +392,7 @@ const MarketAnalysis = () => {
                 </Button>
               </div>
             </CardContent>
-          </Card>
+          </Card> */}
 
           {/* Today's Highlights */}
           <Card>
