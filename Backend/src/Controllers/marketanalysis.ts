@@ -63,7 +63,3 @@ app.get(
     res.json(data);
   }
 );
-
-app.listen(PORT, () => {
-  console.log(`KrishiMitra API running on http://localhost:${PORT}`);
-});
