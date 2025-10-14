@@ -74,6 +74,9 @@ checkpoint = torch.load("plant_disease_cnn.pth", map_location=device)
 plant_classes = checkpoint['classes']
 
 # Define the exact same architecture for loading
+
+# hello
+
 from plant import PlantCNN
 plant_model = PlantCNN(num_classes=len(plant_classes)).to(device)
 plant_model.load_state_dict(checkpoint['model_state_dict'])
