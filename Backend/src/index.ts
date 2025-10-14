@@ -7,6 +7,7 @@ import cors from "cors"
 import { getFarmerProfile, updateFarmerProfile } from "./Controllers/profile";
 import { authenticateUser } from "./middlewares/auth";
 import { getAllSensorData } from "./Controllers/sensor";
+import { chatbot } from "./Controllers/chatbot";
 dotenv.config();
 
 const app = express();
@@ -26,4 +27,5 @@ app.get('/weather',authenticateUser,getWeatherData)
 app.get('/profile',authenticateUser,getFarmerProfile)
 app.put('/UpdateProfile',authenticateUser,updateFarmerProfile);
 app.get("/getIotData",getAllSensorData)
+app.post("/chatbot",chatbot)
 
