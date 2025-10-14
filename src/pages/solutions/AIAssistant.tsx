@@ -16,7 +16,7 @@ const AIAssistant = () => {
       language: "English"
     }
   ]);
-  
+
   const [currentMessage, setCurrentMessage] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [isTyping, setIsTyping] = useState(false);
@@ -39,54 +39,73 @@ const AIAssistant = () => {
     "Weather impact on crop yield"
   ];
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!currentMessage.trim()) return;
 
     // Add user message
     const userMessage = {
       id: messages.length + 1,
-      type: "user" as const,
+      type: "user",
       content: currentMessage,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       language: languages.find(lang => lang.code === selectedLanguage)?.name || "English"
     };
-
     setMessages(prev => [...prev, userMessage]);
     setCurrentMessage("");
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Call your backend Gemini route
+      const response = await fetch("http://localhost:8000/chatbot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: currentMessage, // send user's input to backend
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch response from chatbot backend");
+      }
+
+      const data = await response.json();
+      const botResponseText = data.reply || "Sorry, I couldn't generate a response.";
+
+      // Add bot response to chat
       const botResponse = {
         id: messages.length + 2,
-        type: "bot" as const,
-        content: generateResponse(currentMessage),
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        language: languages.find(lang => lang.code === selectedLanguage)?.name || "English"
+        type: "bot",
+        content: botResponseText,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        language: languages.find((lang) => lang.code === selectedLanguage)?.name || "English",
       };
-      
-      setMessages(prev => [...prev, botResponse]);
+
+      setMessages((prev) => [...prev, botResponse]);
+    } catch (error) {
+      console.error("Error fetching chatbot backend response:", error);
+      const errorResponse = {
+        id: messages.length + 2,
+        type: "bot",
+        content: "Sorry, I encountered an error while generating a response. Please try again later.",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        language: languages.find((lang) => lang.code === selectedLanguage)?.name || "English",
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 2000);
+    }
+
   };
 
-  const generateResponse = (question: string) => {
-    const responses = [
-      "Based on your soil conditions and current weather patterns, I recommend applying nitrogen-rich fertilizer during the vegetative growth stage. The optimal ratio would be 120-60-40 NPK per hectare.",
-      "For effective pest control in rice, implement integrated pest management (IPM). Use pheromone traps for early detection, maintain proper water levels, and apply neem-based organic pesticides during evening hours.",
-      "Wheat harvest timing is crucial for maximum yield. Check for grain moisture content below 14%, golden color, and firm grain texture. In your region, this typically occurs 110-130 days after sowing.",
-      "Organic farming focuses on soil health and biodiversity. Use compost, green manures, crop rotation, and biological pest control. Avoid synthetic chemicals and maintain soil microorganism balance."
-    ];
-    
-    return responses[Math.floor(Math.random() * responses.length)];
-  };
-
-  const handleQuickQuestion = (question: string) => {
+  const handleQuickQuestion = (question) => {
     setCurrentMessage(question);
   };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
+      {/* Header */}
       <div className="mb-8">
         <div className="flex items-center space-x-3 mb-4">
           <div className="p-3 bg-gradient-to-br from-warning/10 to-warning/20 rounded-lg">
@@ -99,6 +118,7 @@ const AIAssistant = () => {
         </div>
       </div>
 
+      {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Chat Interface */}
         <Card className="lg:col-span-3">
@@ -131,7 +151,7 @@ const AIAssistant = () => {
               Ask questions about crops, diseases, weather, market prices, and farming techniques
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent>
             {/* Messages */}
             <div className="h-96 overflow-y-auto mb-4 space-y-4 p-4 border border-border rounded-lg bg-muted/20">
@@ -140,11 +160,10 @@ const AIAssistant = () => {
                   key={message.id}
                   className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg ${
-                    message.type === "user"
+                  <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg ${message.type === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-card border border-border"
-                  }`}>
+                    }`}>
                     <div className="flex items-start space-x-2">
                       {message.type === "bot" && (
                         <Bot className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
@@ -165,7 +184,7 @@ const AIAssistant = () => {
                   </div>
                 </div>
               ))}
-              
+
               {isTyping && (
                 <div className="flex justify-start">
                   <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-lg bg-card border border-border">
